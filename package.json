@@ -1,0 +1,22 @@
+{
+  "name": "connector",
+  "version": "0.0.1",
+  "description": "A configurable a configurable connector that pulls information from one service to the other service",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/will32/Connector.git"
+  },
+  "keywords": [
+    "connector"
+  ],
+  "author": "William Lin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/will32/Connector/issues"
+  },
+  "homepage": "https://github.com/will32/Connector#readme"
+}
