@@ -1,25 +1,19 @@
 {
   "name": "connector",
-  "version": "0.0.1",
-  "description": "A configurable a configurable connector that pulls information from one service to the other service",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "test"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/will32/Connector.git"
-  },
-  "keywords": [
-    "connector"
-  ],
-  "author": "William Lin",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/will32/Connector/issues"
-  },
-  "homepage": "https://github.com/will32/Connector#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "axios": "^0.18.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
   }
 }
