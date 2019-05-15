@@ -1,12 +1,12 @@
-const { workerData } = require('worker_threads');
+const { workerData, isMainThread } = require('worker_threads');
 
 // TODO: update callback and timer on message
-module.exports = () => {
+const timerTrigger = (config) => {
     const timerTriggerCreator = () => {
         const {
             callback = () => { }, // avoid calling undefined as a function
             timer = 1000,   // default to 1s
-        } = workerData;
+        } = config;
 
         callback();
         setTimeout(
@@ -16,3 +16,14 @@ module.exports = () => {
     };
     timerTriggerCreator();
 }
+
+if (!isMainThread) {
+    const { timer } = workerData;
+    const callback = eval(workerData.callback);
+    timerTrigger({
+        timer,
+        callback
+    });
+}
+
+module.exports = timerTrigger;

@@ -6,7 +6,6 @@ const triggerTypes = {
     API: 2
 };
 
-
 /**
  * call the callback when the trigger is satisfied
  * trigger will be tested towards only if triggerType contains such trigger and triggers contain corresponding properties
@@ -14,18 +13,17 @@ const triggerTypes = {
  */
 const trigger = (config) => {
     const { triggerType, callback, timer } = config;
-
     // if trigger is off, do nothing
     if ((triggerType | 0) === 0) {
         return;
     }
 
     // test trigger contains timer
-    if ((triggerType & triggerTypes.TIMER) === triggerType.TIMER) {
+    if ((triggerType & triggerTypes.TIMER) === triggerTypes.TIMER) {
         new Worker(
-            './timerTrigger.js', {
+            './trigger/timerTrigger.js', {
                 workerData: {
-                    callback,
+                    callback: callback.toString(),
                     timer
                 }
             }
@@ -33,4 +31,7 @@ const trigger = (config) => {
     }
 }
 
-module.exports = trigger;
+module.exports = {
+    trigger,
+    triggerTypes,
+};
