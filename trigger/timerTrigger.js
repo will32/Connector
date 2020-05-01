@@ -1,12 +1,16 @@
-const { workerData, isMainThread } = require('worker_threads');
-
 // TODO: update callback and timer on message
 const timerTrigger = (config) => {
+    const {
+        callback = () => { }, // avoid calling undefined as a function
+        timer = 1000,   // default to 1s
+        cancellationToken = () => false,
+        // TODO: add live config update mode
+    } = config;
+
     const timerTriggerCreator = () => {
-        const {
-            callback = () => { }, // avoid calling undefined as a function
-            timer = 1000,   // default to 1s
-        } = config;
+        if (cancellationToken()) {
+            return;
+        }
 
         callback();
         setTimeout(
@@ -15,15 +19,6 @@ const timerTrigger = (config) => {
         );
     };
     timerTriggerCreator();
-}
-
-if (!isMainThread) {
-    const { timer } = workerData;
-    const callback = eval(workerData.callback);
-    timerTrigger({
-        timer,
-        callback
-    });
 }
 
 module.exports = timerTrigger;
