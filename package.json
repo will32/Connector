@@ -5,8 +5,9 @@
   "scripts": {
     "start": "node ./index.js",
     "hot": "nodemon ./index.js",
-    "debug": "node --inspect-brk=9229 ./connector.test.js",
-    "test": "mocha --exit"
+    "debug": "node --inspect-brk=9229 ./debug.js",
+    "test": "mocha",
+    "test-debug": "mocha --inspect-brk=9339"
   },
   "dependencies": {
     "axios": "^0.19.2",

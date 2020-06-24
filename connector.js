@@ -1,4 +1,5 @@
 const { Observable, isObservable, from } = require('rxjs');
+const { finalize, map } = require('rxjs/operators');
 const _ = require('lodash');
 const util = require('util');
 const setTimeoutPromise = util.promisify(setTimeout);
@@ -6,8 +7,9 @@ const setTimeoutPromise = util.promisify(setTimeout);
 const connector = ({
     ajaxConfig,
     period = 0,
-    comparer = (oldObj, newObj) => _.isEqual(oldObj, newObj),
-    ajaxClient
+    comparer = (oldObj, newObj) => _.isEqual(_.get(oldObj, 'data'), _.get(newObj, 'data')),
+    ajaxClient,
+    canceler = () => false
 }) => {
     const observable = new Observable(subscriber => {
         const task = (lastResponse) => {
@@ -18,16 +20,23 @@ const connector = ({
 
             setTimeoutPromise(period)
                 .then(() => {
-                    const ajaxSubscription = ajaxObservable.subscribe(
-                        (newResponse) => {
-                            const areSameResponse = comparer(lastResponse, newResponse);
-                            if (!areSameResponse) {
-                                subscriber.next(newResponse);
-                            }
-                            task(newResponse);
-                        },
-                        undefined,
-                        () => ajaxSubscription.unsubscribe())
+                    let response = lastResponse;
+                    ajaxObservable
+                        .pipe(
+                            map(newResponse => {
+                                const areSameResponse = comparer(lastResponse, newResponse);
+                                if (!areSameResponse) {
+                                    subscriber.next(newResponse);
+                                    response = newResponse;
+                                }
+                            }),
+                            finalize(() => {
+                                if (!canceler()) {
+                                    task(response);
+                                }
+                            })
+                        )
+                        .subscribe();
                 });
         };
 
