@@ -11,8 +11,9 @@ describe("connector", () => {
             period: 1 * 1000
         });
     
-        connectorObservable.subscribe(newData => {
+        const subscription = connectorObservable.subscribe(newData => {
             assert.equal(newData, data);
+            subscription.unsubscribe();
             done();
         });
     });
