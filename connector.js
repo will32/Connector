@@ -1,7 +1,7 @@
 const { Observable } = require('rxjs');
 const _ = require('lodash');
-const setTimeoutPromise = util.promisify(setTimeout);
 const util = require('util');
+const setTimeoutPromise = util.promisify(setTimeout);
 
 const connector = ({
     ajaxConfig,
