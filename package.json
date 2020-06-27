@@ -1,5 +1,5 @@
 {
-  "name": "connector",
+  "name": "connector-observable",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -15,5 +15,25 @@
     "eslint": "^6.8.0",
     "mocha": "^8.0.1",
     "nodemon": "^2.0.3"
-  }
+  },
+  "description": "Connect to api and observe the response changes",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/will32/Connector.git"
+  },
+  "keywords": [
+    "rxjs",
+    "observable",
+    "ajax"
+  ],
+  "author": "William Lin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/will32/Connector/issues"
+  },
+  "homepage": "https://github.com/will32/Connector#readme"
 }
