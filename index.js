@@ -4,7 +4,7 @@ const connector = require('./connector');
 
 
 const main = ({
-    ajaxConfig,
+    ajaxConfig = {},
     period = 1000,
     comparer = (oldObj, newObj) => _.isEqual(_.get(oldObj, 'data'), _.get(newObj, 'data')),
     ajaxClient = axios,

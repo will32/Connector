@@ -26,9 +26,10 @@
     "url": "git+https://github.com/will32/Connector.git"
   },
   "keywords": [
-    "rxjs",
+    "ajax",
+    "long-polling",
     "observable",
-    "ajax"
+    "rxjs"
   ],
   "author": "William Lin",
   "license": "MIT",
