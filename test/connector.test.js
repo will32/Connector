@@ -6,6 +6,7 @@ const { it, describe, beforeEach } = require('mocha');
 
 describe("connector", () => {
     let canceler;
+    let comparer;
 
     beforeEach(() => {
         canceler = (() => {
@@ -17,6 +18,8 @@ describe("connector", () => {
                 return data;
             }
         })();
+
+        comparer = (oldObj, newObj) => _.isEqual(_.get(oldObj, 'data'), _.get(newObj, 'data'));
     })
     it('should push ajax response', (done) => {
         const data = { data: 1 };
@@ -25,7 +28,8 @@ describe("connector", () => {
             ajaxClient: () => ajaxClient,
             ajaxConfig: {},
             period: 1,
-            canceler
+            canceler,
+            comparer,
         });
 
         connectorObservable
@@ -48,7 +52,8 @@ describe("connector", () => {
             ajaxClient,
             ajaxConfig: {},
             period: 5,
-            canceler
+            canceler,
+            comparer,
         });
         observable.subscribe(response => {
             assert.equal(response.data, counter);
@@ -58,7 +63,7 @@ describe("connector", () => {
         }, done, done);
     })
 
-    
+
     it('should not push same ajax response', done => {
         const response = { data: 1 };
         const ajaxClient = () => {
@@ -69,7 +74,8 @@ describe("connector", () => {
             ajaxClient,
             ajaxConfig: {},
             period: 5,
-            canceler
+            canceler,
+            comparer,
         });
         let counter = 0;
         const subscription = observable.subscribe(() => {

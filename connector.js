@@ -1,15 +1,14 @@
 const { Observable, isObservable, from } = require('rxjs');
 const { finalize, map, catchError } = require('rxjs/operators');
-const _ = require('lodash');
 const util = require('util');
 const setTimeoutPromise = util.promisify(setTimeout);
 
 const connector = ({
     ajaxConfig,
-    period = 0,
-    comparer = (oldObj, newObj) => _.isEqual(_.get(oldObj, 'data'), _.get(newObj, 'data')),
+    period,
+    comparer,
     ajaxClient,
-    canceler = () => false
+    canceler
 }) => {
     const observable = new Observable(subscriber => {
         const task = (lastResponse) => {
@@ -39,14 +38,14 @@ const connector = ({
                                 }
                             })
                         )
-                .subscribe();
-        });
-};
+                        .subscribe();
+                });
+        };
 
-task();
+        task();
     });
 
-return observable;
+    return observable;
 }
 
 module.exports = connector;
