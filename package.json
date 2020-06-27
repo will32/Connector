@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./index.js",
-    "hot": "nodemon ./index.js",
-    "debug": "node --inspect=9229 ./debug.js",
     "test": "mocha",
     "test-debug": "mocha --inspect-brk=9339"
   },
