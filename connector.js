@@ -1,5 +1,5 @@
 const { Observable, isObservable, from } = require('rxjs');
-const { finalize, map } = require('rxjs/operators');
+const { finalize, map, catchError } = require('rxjs/operators');
 const _ = require('lodash');
 const util = require('util');
 const setTimeoutPromise = util.promisify(setTimeout);
@@ -30,20 +30,23 @@ const connector = ({
                                     response = newResponse;
                                 }
                             }),
+                            catchError(subscriber.error),
                             finalize(() => {
                                 if (!canceler()) {
                                     task(response);
+                                } else {
+                                    subscriber.complete()
                                 }
                             })
                         )
-                        .subscribe();
-                });
-        };
+                .subscribe();
+        });
+};
 
-        task();
+task();
     });
 
-    return observable;
+return observable;
 }
 
 module.exports = connector;

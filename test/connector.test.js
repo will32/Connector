@@ -1,20 +1,14 @@
+const _ = require('lodash');
 const assert = require('assert');
 const connector = require('../connector');
 const { it, describe, beforeEach } = require('mocha');
-const { of, empty } = require('rxjs')
-const { startWith, first } = require('rxjs/operators')
-const { TestScheduler } = require('rxjs/testing')
 
 
 describe("connector", () => {
-    let scheduler = new TestScheduler(assert.equal);
+    let canceler;
 
     beforeEach(() => {
-        scheduler = new TestScheduler(assert.equal);
-    });
-
-    it('should push ajax response', (done) => {
-        const canceler = (() => {
+        canceler = (() => {
             let data = false;
             return (value) => {
                 if (value !== undefined) {
@@ -23,7 +17,9 @@ describe("connector", () => {
                 return data;
             }
         })();
-        const data = {data: 1};
+    })
+    it('should push ajax response', (done) => {
+        const data = { data: 1 };
         const ajaxClient = Promise.resolve(data);
         const connectorObservable = connector({
             ajaxClient: () => ajaxClient,
@@ -36,26 +32,54 @@ describe("connector", () => {
             .subscribe(newData => {
                 assert.equal(newData, data);
                 canceler(true);
-                done();
-            });
+            }, done, done);
     });
 
-    // it('should push ajax response in interval', () => {
-    //     scheduler.run(({ expectObservable }) => {
-    //         const responses = { a: 1, b: 2, c: 3 };
-    //         const ajaxClient = () => {
-    //             let data = 0;
-    //             return Promise.resolve(data += 1);
-    //         };
-    //         const expectedMarble = 'abc|';
+    it('should push ajax response in interval', done => {
+        let counter = 0;
+        const response = { data: counter };
+        const ajaxClient = () => {
+            counter += 1;
+            response.data += 1;
+            return Promise.resolve(_.cloneDeep(response));
+        };
 
-    //         const observable = connector({
-    //             ajaxClient,
-    //             ajaxConfig: {},
-    //             period: 1 * 1000,
-    //         });
+        const observable = connector({
+            ajaxClient,
+            ajaxConfig: {},
+            period: 5,
+            canceler
+        });
+        observable.subscribe(response => {
+            assert.equal(response.data, counter);
+            if (counter >= 7) {
+                canceler(true);
+            }
+        }, done, done);
+    })
 
-    //         expectObservable(observable, '--- !').toBe('123');
-    //     })
-    // })
+    
+    it('should not push same ajax response', done => {
+        const response = { data: 1 };
+        const ajaxClient = () => {
+            return Promise.resolve(_.cloneDeep(response));
+        };
+
+        const observable = connector({
+            ajaxClient,
+            ajaxConfig: {},
+            period: 5,
+            canceler
+        });
+        let counter = 0;
+        const subscription = observable.subscribe(() => {
+            counter += 1;
+        }, done, () => done(new Error('Unexpected finish')));
+        setTimeout(() => {
+            assert.equal(counter, 1);
+            subscription.unsubscribe();
+            canceler(true);
+            done();
+        }, 1000);
+    })
 })
