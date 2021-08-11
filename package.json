@@ -1,6 +1,6 @@
 {
   "name": "connector-observable",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "scripts": {
     "test": "mocha",
     "test-debug": "mocha --inspect-brk=9339"
