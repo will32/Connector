@@ -6,14 +6,14 @@
     "test-debug": "mocha --inspect-brk=9339"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "lodash": "^4.17.15",
-    "rxjs": "^6.5.5"
+    "axios": "^0.21.1",
+    "lodash": "^4.17.21",
+    "rxjs": "^7.3.0"
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "mocha": "^8.0.1",
-    "nodemon": "^2.0.3"
+    "eslint": "^7.32.0",
+    "mocha": "^9.0.3",
+    "nodemon": "^2.0.12"
   },
   "description": "Connect to api and observe the response changes",
   "main": "index.js",
